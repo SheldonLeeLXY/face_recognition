@@ -34,6 +34,8 @@ while True:
         nose_bridge = face_landmarks['nose_bridge']
         nose_tip = face_landmarks['nose_tip']
         chin = face_landmarks['chin']
+        top_lip = face_landmarks['top_lip']
+        bottom_lip = face_landmarks['bottom_lip']
 
         # 计算眼睛的中心点
         left_eye_center = np.mean(left_eye, axis=0).astype("int")
@@ -74,9 +76,15 @@ while True:
         # 显示帧率
         cv2.putText(frame, f"FPS: {fps:.2f}", (500, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
 
-        # 画出关键点
-        cv2.circle(frame, tuple(left_eye_center), 2, (255, 0, 0), -1)
-        cv2.circle(frame, tuple(right_eye_center), 2, (255, 0, 0), -1)
+        # 画出每个面部关键点
+        for landmark, points in face_landmarks.items():
+            for point in points:
+                cv2.circle(frame, tuple(point), 2, (0, 255, 0), -1)
+
+        # # 画出眼睛的中心点
+        # cv2.circle(frame, tuple(left_eye_center), 4, (255, 0, 0), -1)
+        # cv2.circle(frame, tuple(right_eye_center), 4, (255, 0, 0), -1)
+        # cv2.circle(frame, tuple(nose_tip_center), 4, (255, 0, 0), -1)
 
     # 显示结果
     cv2.imshow('Face Rotation Detection with Yaw, Pitch, Roll', frame)
